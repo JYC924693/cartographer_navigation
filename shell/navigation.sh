@@ -5,7 +5,7 @@
 sleep 4s
 
 {
-    gnome-terminal --tab "cartographer_localization" -- bash -c "cd ~/cartographer_navigation/cartographer_ws;source install_isolated/setup.bash;roslaunch cartographer_ros demo_backpack_2d_localization.launch;exec bash"
+    gnome-terminal --tab "cartographer_localization" -- bash -c "cd ~/cartographer_navigation/cartographer_ws;source install_isolated/setup.bash;roslaunch cartographer_ros self_backpack_2d_localization.launch;exec bash"
 }&
 sleep 4s
 
