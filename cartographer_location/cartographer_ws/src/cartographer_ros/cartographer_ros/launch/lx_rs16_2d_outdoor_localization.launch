@@ -1,0 +1,53 @@
+<!--
+  Copyright 2016 The Cartographer Authors
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<launch>
+  <!-- bag的地址与名称 -->
+  <arg name="bag_filename" default="/home/lx/bagfiles/rslidar-outdoor-gps-notf.bag"/>
+  <!-- pbstream的地址与名称 -->
+  <arg name="load_state_filename" default="/home/lx/carto_ws/map/2d-1.pbstream"/>
+
+  <!-- 使用bag的时间戳 -->
+  <param name="/use_sim_time" value="true" />
+
+  <!-- 启动cartographer -->
+  <node name="cartographer_node" pkg="cartographer_ros"
+      type="cartographer_node" args="
+          -configuration_directory $(find cartographer_ros)/configuration_files
+          -configuration_basename lx_rs16_2d_outdoor_localization.lua
+          -load_state_filename $(arg load_state_filename)"
+      output="screen">
+    <remap from="points2" to="rslidar_points" />
+    <remap from="scan" to="front_scan" />
+    <remap from="odom" to="odom_scout" />
+    <remap from="imu" to="imu" />
+  </node>
+
+  <!-- 启动map_server -->
+  <!-- 
+  <node name="map_server" pkg="map_server" type="map_server"
+      args="/home/lx/carto_ws/map/2d-1.yaml" /> 
+  -->
+
+  <!-- 启动rviz -->
+  <node name="rviz" pkg="rviz" type="rviz" required="true"
+      args="-d $(find cartographer_ros)/configuration_files/demo_2d.rviz" />
+
+  <!-- 启动rosbag -->
+  <node name="playbag" pkg="rosbag" type="play"
+      args="--clock $(arg bag_filename)" />
+
+</launch>

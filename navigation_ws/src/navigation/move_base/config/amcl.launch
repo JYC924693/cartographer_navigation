@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<launch>
+  <node pkg="amcl" type="amcl" name="amcl" output="screen">
+  
+
+  
+    <!-- 里程计模型参数 -->
+    <!-- 如果模型为corrected，后面的几个参数值都要减小，如下 -->
+    <!--
+    <param name="odom_model_type" value="diff_corrected">
+    <param name="odom_alpha1" value="0.005"/>
+    <param name="odom_alpha2" value="0.005"/>
+    <param name="odom_alpha3" value="0.010"/>
+    <param name="odom_alpha4" value="0.005"/>
+    <param name="odom_alpha5" value="0.003"/>
+    -->
+    <param name="odom_model_type" value="omni"/>  <!-- 里程计模式为差分 -->
+    <param name="odom_alpha1" value="0.2"/>  <!-- 由机器人运动部分的旋转分量估计的里程计旋转的期望噪声，默认0.2 -->
+    <param name="odom_alpha2" value="0.2"/>  <!-- 由机器人运动部分的平移分量估计的里程计旋转的期望噪声，默认0.2 -->
+    <param name="odom_alpha3" value="0.8"/>  <!-- 由机器人运动部分的平移分量估计的里程计平移的期望噪声，默认0.2 -->
+    <param name="odom_alpha4" value="0.2"/>  <!-- 由机器人运动部分的旋转分量估计的里程计平移的期望噪声，默认0.2 -->
+    <param name="odom_alpha5" value="0.2"/>  <!-- 平移相关的噪声参数（仅用于"omni"模型），默认0.2 -->
+    
+
+    
+    <!-- 激光模型参数 -->
+    <param name="laser_min_range" value="-1.0"/>  <!-- 被考虑的最小扫描范围；参数设置为-1.0时，将会使用激光上报的最小扫描范围 -->
+    <param name="laser_max_range" value="-1.0"/>  <!-- 被考虑的最大扫描范围；参数设置为-1.0时，将会使用激光上报的最大扫描范围 -->
+    <param name="laser_max_beams" value="30"/>  <!-- default:30,更新滤波器时，每次扫描中多少个等间距的光束被使用 -->
+    <!-- 这4个laser_z参数，在动态环境下的定位时用于异常值去除技术 -->
+    <param name="laser_z_hit" value="0.5"/>  <!-- 模型的z_hit部分的混合权值，默认0.95 -->
+    <param name="laser_z_short" value="0.05"/>  <!-- 模型的z_short部分的混合权值，默认0.1 -->
+    <param name="laser_z_max" value="0.05"/>  <!-- 模型的z_max部分的混合权值，默认0.05 -->
+    <param name="laser_z_rand" value="0.5"/>  <!-- 模型的z_rand部分的混合权值，默认0.05 -->
+    <param name="laser_sigma_hit" value="0.2"/>  <!-- 被用在模型的z_hit部分的高斯模型的标准差，默认0.2m -->
+    <param name="laser_lambda_short" value="0.1"/>  <!-- 模型z_short部分的指数衰减参数，默认0.1，λ越大随距离增大意外对象概率衰减越快,默认:0.1 -->
+    <param name="laser_model_type" value="likelihood_field"/>  <!-- 模型使用，默认:likelihood_field -->
+    <param name="laser_likelihood_max_dist" value="2.0"/>  <!-- 地图上做障碍物膨胀的最大距离，用作likelihood_field模型,默认:2.0 -->
+    
+    
+
+    <!-- 滤波器参数 -->
+    <param name="min_particles" value="2000"/>  <!-- default:100，允许的粒子数量的最小值 -->
+    <param name="max_particles" value="5000"/>  <!-- default:5000，允许的粒子数量的最大值 -->
+    <param name="kld_err" value="0.05"/>  <!-- default:0.01，真实概率分布与估计概率分布间的误差 -->
+    <param name="kld_z" value="0.99"/>  <!-- default:0.99，标准正态分位数（1 - P），其中P是在估计分布的误差，要小于kld_err -->
+    <param name="update_min_d" value="0.1"/>  <!-- default:0.2，向前运动多少就更新粒子阈值，建议不大于车半径 -->
+    <param name="update_min_a" value="0.2"/>  <!-- default:PI/6，同样的，旋转多少弧度就更新粒子阈值 -->
+    <param name="resample_interval" value="1"/>  <!-- default:2，对粒子样本的重采样间隔，设置2~5即可 -->
+    <param name="transform_tolerance" value="0.1"/>  <!-- defaule:0.1,tf变换发布推迟的时间 -->
+    <param name="recovery_alpha_slow" value="0.001"/>  <!-- 两个失效恢复参数，默认二者都是0 -->
+    <param name="recovery_alpha_fast" value="0.1"/>
+    <param name="gui_publish_rate" value="10"/>  <!-- default:-1,scan和path发布到可视化软件的最大频率，-1的话就是不发布 -->
+    <param name="save_pose_rate" value="0.5"/>  <!-- default:0.5 -->
+    <!-- 下面两个参数是navigation 1.4.2以后新加入的参数 -->
+    <param name="use_map_topic" value="false"/>  <!-- 为true时，AMCL将会订阅map话题，而不是调用服务返回地图  true-->
+    <param name="first_map_only" value="false"/>  <!-- 为true时，AMCL将仅使用订阅的第一个地图，而并非每次都更新接收的新地图   true -->
+    
+    
+
+    <!-- 坐标系参数 -->
+    <!-- 这里设置三个坐标系的名称，默认分别三odom，base_link，map，改成你自己的 -->
+    <param name="odom_frame_id" value="odom"/>  <!-- 里程计坐标系 -->
+    <param name="base_frame_id" value="base_link"/>  <!-- 添加机器人基坐标系 base_footprint-->
+    <param name="global_frame_id" value="map"/>  <!-- 添加地图坐标系 -->
+    <param name="tf_broadcast" value="true"/>  <!-- default:true,设置为false可阻止amcl发布全局坐标系和里程计坐标系之间的tf变换 -->
+    
+
+    
+    <!-- 机器人初始化数据设置 -->
+    <!-- 下面几个initial_pose_参数决定撒出去的初始位姿粒子集范围中心 -->
+    <param name="initial_pose_x" value="11.9"/>  <!-- 初始位姿均值（x）-->
+    <param name="initial_pose_y" value="17.7"/>  <!-- 初始位姿均值（y） -->
+    <param name="initial_pose_a" value="0.0"/>  <!-- 初始位姿均值（yaw） -->
+    <!-- initial_cov_参数决定初始粒子集的范围 -->
+    <param name="initial_cov_xx" value="1"/>  <!-- 初始位姿协方差（x*x） -->
+    <param name="initial_cov_yy" value="1"/>  <!-- 初始位姿协方差（y*y） -->
+    <param name="initial_cov_aa" value="(π/6)*(π/6)"/>  <!-- 初始位姿协方差（yaw*yaw） -->
+    <remap from="scan" to="/r2000_driver_node/scan"/>  <!--  /rslidar/scan  -->
+    
+
+  </node>
+
+
+</launch>

@@ -1,0 +1,53 @@
+<!--
+  Copyright 2016 The Cartographer Authors
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<launch>
+  <param name="/use_sim_time" value="true" />
+
+  <param name="/localization" type="bool" value = "1"/>
+  <param name="/set_inital_pose_x" type="double" value = "0"/>
+  <param name="/set_inital_pose_y" type="double" value = "0"/>
+  <param name="/set_inital_pose_z" type="double" value = "0.0"/>
+  <param name="/set_inital_pose_ox" type="double" value = "0.0"/>
+  <param name="/set_inital_pose_oy" type="double" value = "0.0"/>
+  <param name="/set_inital_pose_oz" type="double" value = "0"/>
+  <param name="/set_inital_pose_ow" type="double" value = "1"/>
+
+  <node name="cartographer_node" pkg="cartographer_ros"
+      type="cartographer_node" args="
+          -configuration_directory $(find cartographer_ros)/configuration_files
+          -configuration_basename backpack_2d_localization.lua
+          -load_state_filename /home/space/map/carto_ws_fangzhen/map/2d-1.pbstream"
+      output="screen">
+    <remap from="scan" to="/scan" />
+    <!-- <remap from="odom" to="/odom" /> -->
+  </node>
+
+  <!-- <node pkg="tf" type="static_transform_publisher" name="laser_broadcaster" args="0.58 0 0 0 0 0 base_link scan 8" /> -->
+  <node pkg="tf" type="static_transform_publisher" name="laser_broadcaster" args="0.05 0 0 0 0 0 base_footprint base_scan 33" />
+  
+
+
+
+  <node name="cartographer_occupancy_grid_node" pkg="cartographer_ros"
+      type="cartographer_occupancy_grid_node" args="-resolution 0.05
+                                                    -pure_localization 1" /> -->
+
+
+  <!-- <node name="rviz" pkg="rviz" type="rviz" required="true"
+      args="-d $(find cartographer_ros)/configuration_files/demo_2d.rviz" /> -->
+
+</launch>

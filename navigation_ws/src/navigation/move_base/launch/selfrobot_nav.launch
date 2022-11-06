@@ -1,0 +1,22 @@
+<launch>
+  <!-- <include file="/home/ryan/laser_odom_amcl/src/all/navigation/amcl/launch/amcl_loc1.launch.xml" /> -->
+  <!-- 加载地图 这里需要修改-->
+  <node name="map_server" pkg="map_server" type="map_server" args="~/cartographer_navigation/map/carto_ws_fangzhen/map/2d-1.yaml"/>
+
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen" clear_params="true">
+    <rosparam file="~/cartographer_navigation/navigation_ws/src/navigation/move_base/config/costmap_common_params.yaml" command="load" ns="global_costmap" />
+    <rosparam file="~/cartographer_navigation/navigation_ws/src/navigation/move_base/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
+    <rosparam file="~/cartographer_navigation/navigation_ws/src/navigation/move_base/config/global_costmap_params.yaml" command="load" />
+    <rosparam file="~/cartographer_navigation/navigation_ws/src/navigation/move_base/config/local_costmap_params.yaml" command="load" />
+    <!-- <rosparam file="~/cartographer_navigation/navigation_ws/src/navigation/move_base/config/dwa_local_planner_params.yaml" command="load" /> -->
+    <rosparam file="~/cartographer_navigation/navigation_ws/src/navigation/move_base/config/teb_local_planner_params.yaml" command="load" />
+    <!-- <rosparam file="~/cartographer_navigation/navigation_ws/src/navigation/move_base/config/eband_local_planner_params.yaml" command="load" /> -->
+    
+    <rosparam file="~/cartographer_navigation/navigation_ws/src/navigation/move_base/config/global_planner_params.yaml" command="load" />
+    <rosparam file="~/cartographer_navigation/navigation_ws/src/navigation/move_base/config/move_base_params.yaml" command="load" />
+    
+  </node>
+
+  <node name="rviz" pkg="rviz" type="rviz" required="true" args="-d ~/cartographer_navigation/rviz/1022.rviz" />
+
+</launch>

@@ -1,0 +1,19 @@
+global_costmap:
+  global_frame: map
+  robot_base_frame: base_footprint
+
+  transform_tolerance: 2
+  update_frequency: 1.0
+  publish_frequency: 0.5
+  # rolling_window: false 
+  static_map: true
+  width: 32
+  height: 32
+  # origin_x: 12.4037
+  # origin_y: 17.6778
+  resolution: 0.05
+  map_type: costmap
+
+  # plugins:
+  #   - {name: static_layer, type: "costmap_2d::StaticLayer"}
+  #   - {name: global_inflation_layer, type: "costmap_2d::InflationLayer"}

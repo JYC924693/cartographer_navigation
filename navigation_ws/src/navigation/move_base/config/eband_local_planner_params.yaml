@@ -1,0 +1,67 @@
+EBandPlannerROS:
+
+  # Common Parameters
+  # Goal, 目标点允差
+  xy_goal_tolerance: 0.1
+  yaw_goal_tolerance: 0.1
+
+  # Visualization Parameters
+  # 这个是可视化参数, rviz 中泡泡的刷新率, 默认是0.5(秒), 建议保持默认
+  marker_lifetime: 0.5
+
+  # Elastic Band Parameters
+
+  # 这一个参数查看 eband_local_planner.cpp 里的 checkOverlap 函数
+  # 这是一个因子, 不是简单的字面意思
+  # 越小泡泡越多, 默认 0.7
+  eband_min_relative_overlap: 0.8
+
+  # 字面意思, 内力增益和斥力增益, 默认为1.0 和 2.0, 参数比较难调, 建议保持默认
+  eband_internal_force_gain: 1.0
+  eband_external_force_gain: 2.0
+
+  # 先放着
+  eband_equilibrium_relative_overshoot: 0.75
+
+  # 算法迭代次数
+  num_iterations_eband_optimization: 5
+
+  # costmap 权重,这个因子参与计算到障碍物的距离对泡泡半径的影响
+  costmap_weight: 10
+
+  # Trajectory Controller Parameters
+  # 速度控制参数
+  max_vel_lin: 1
+  min_vel_lin: -1
+
+  max_vel_th: 0.5
+  min_vel_th: -0.5
+
+  # PID 控制参数
+  k_prop: 10.0
+  k_damp: 3.5
+
+  # 速度指令的发布频率
+  Ctrl_Rate: 10
+
+  max_acceleration: 2
+  max_translational_acceleration: 2
+  max_rotational_acceleration: 1
+
+  # 泡泡速度乘积器, 用于平滑速度...用
+  bubble_velocity_multiplier: 1.5
+  
+  # 设为 false 为全向驱动, 默认为 true 差速驱动
+  differential_drive: true
+
+  # 仅对全向驱动有效
+  # 当前点到目标点的旋转阈值
+  # 如果当前点到设置的目标点 goal 大于这个阈值
+  # 出发前要先旋转校正方向
+  # rotation_correction_threshold: 20
+
+  # 仅对差速驱动有效
+  # 与上条类似,但不是阈值,是一个因子
+  # 决定出发前需不需要旋转校正方向
+  rotation_threshold_multiplier: 10.0
+

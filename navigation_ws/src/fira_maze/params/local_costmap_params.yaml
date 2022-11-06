@@ -1,0 +1,13 @@
+local_costmap:
+  global_frame: /odom
+  robot_base_frame: /base_footprint
+  update_frequency: 2.0
+  publish_frequency: 0.5
+  static_map: false
+  rolling_window: true
+  width: 3.5
+  height: 3.5
+  resolution: 0.01 #0.05
+  transform_tolerance: 1.0
+  inflation_radius: 0.03
+  footprint: [[-0.07,-0.08],[-0.07,0.08],[0.02,0.08],[0.02,-0.08]]
